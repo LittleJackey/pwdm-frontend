@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>登录</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link rel="stylesheet" href="sdk/jssdk/sdk.css" />
+    <link rel="stylesheet" href="sdk/jssdk/helper.css" />
+    <link rel="stylesheet" href="sdk/jssdk/iconfont.css" />
+    <link rel="SHORTCUT ICON" href="images/ljic.png">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- 这是默认主题所需的，如果是其他主题则不需要 -->
+    <!-- 从 1.1.0 开始 sdk.css 将不支持 IE 11，如果要支持 IE11 请引用这个 css，并把前面那个删了 -->
+    <!-- <link rel="stylesheet" href="sdk-ie11.css" /> -->
+    <!-- 不过 amis 开发团队几乎没测试过 IE 11 下的效果，所以可能有细节功能用不了，如果发现请报 issue -->
+    <style>
+        html,
+        body,
+        .app-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root" class="app-wrapper"></div>
+    <script src="sdk/jssdk/sdk.js"></script>
+    <script type="text/javascript">
+        (function () {
+            let amis = amisRequire('amis/embed');
+            // 通过替换下面这个配置来生成不同页面
+            let amisJSON = {
+                "type": "page",
+                "body": [
+                    {
+                        "id": "u:910ccae9c222",
+                        "type": "form",
+                        "title": "登录",
+                        "mode": "horizontal",
+                        "dsType": "api",
+                        "feat": "Insert",
+                        "redirect": "index.html",
+                        "body": [
+                            {
+                                "type": "input-text",
+                                "label": "用户名",
+                                "name": "username",
+                                "id": "u:f14135c12bff",
+                                "required": "true"
+                            },
+                            {
+                                "type": "input-password",
+                                "label": "<a href='./password'>密码</a>",
+                                "name": "password",
+                                "id": "u:9e8ba44e70ce",
+                                "required": "true"
+                            }
+                        ],
+                        "api": {
+                            "url": "/api/user/login",
+                            "method": "post",
+                            "requestAdaptor": "",
+                            "adaptor": "",
+                            "messages": {
+                            }
+                        },
+                        "actions": [
+                            {
+                                "type": "button",
+                                "label": "提交",
+                                "onEvent": {
+                                    "click": {
+                                        "actions": [
+                                            {
+                                                "actionType": "submit",
+                                                "componentId": "u:910ccae9c222"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "level": "primary",
+                                "id": "u:383039a2cd26"
+                            }
+                        ],
+                        "resetAfterSubmit": true
+                    }
+                ],
+                "id": "u:f708e1d75aa4",
+                "aside": [
+                ]
+            };
+            let amisScoped = amis.embed(
+                '#root',
+                amisJSON,
+                {},
+                {
+                    fetcher: (url, method, data, config) => {
+
+                        // 发起请求使用 axios
+                        return axios(url, method, data, config)
+                            .then(response => {
+                                if (response.data.status === 0) {
+                                    // 提取JWT Token，假设Token存储在响应的data字段中
+                                    // console.log("res1=>" + JSON.stringify(response.data.data.token));
+                                    const token = response.data.data.token;
+
+                                    if (token) {
+                                        // 将Token存储在localStorage中
+                                        localStorage.setItem('token', token);
+                                        console.log(token);
+                                    }
+                                }
+                                return response; // 返回响应对象
+                            })
+                            .catch(error => {
+                                // 处理请求错误
+                                console.error('请求错误', error);
+                                throw error;
+                            });
+                    },
+
+                }
+            );
+        })();
+    </script>
+</body>
+
+</html>

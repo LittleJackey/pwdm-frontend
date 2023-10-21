@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>pwd manager</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link rel="stylesheet" href="sdk/jssdk/sdk.css" />
+    <link rel="stylesheet" href="sdk/jssdk/helper.css" />
+    <link rel="stylesheet" href="sdk/jssdk/iconfont.css" />
+    <link rel="SHORTCUT ICON" href="images/ljic.png">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- 这是默认主题所需的，如果是其他主题则不需要 -->
+    <!-- 从 1.1.0 开始 sdk.css 将不支持 IE 11，如果要支持 IE11 请引用这个 css，并把前面那个删了 -->
+    <!-- <link rel="stylesheet" href="sdk-ie11.css" /> -->
+    <!-- 不过 amis 开发团队几乎没测试过 IE 11 下的效果，所以可能有细节功能用不了，如果发现请报 issue -->
+    <style>
+        html,
+        body,
+        .app-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root" class="app-wrapper"></div>
+    <script src="sdk/jssdk/sdk.js"></script>
+    <script type="text/javascript">
+        (function () {
+            let amis = amisRequire('amis/embed');
+            // 通过替换下面这个配置来生成不同页面
+            let amisJSON = {
+                "type": "page",
+                "body": [
+                    {
+                        "id": "u:b1306d47fe98",
+                        "type": "crud",
+                        "mode": "table",
+                        "api": {
+                            "url": "/api/account/page",
+                            "method": "get",
+                            "headers": {
+                                "token": "${ls:token}"
+                            }
+                        },
+                        "syncLocation": false,
+                        "bulkActions": [
+                        ],
+                        "itemActions": [
+                        ],
+                        "filterSettingSource": [
+                            "id",
+                            "url",
+                            "username",
+                            "email",
+                            "phone",
+                            "description",
+                            "tag"
+                        ],
+                        "features": [
+                            "filter",
+                            "create"
+                        ],
+                        "filterColumnCount": 3,
+                        "filterEnabledList": [
+                            {
+                                "label": "id",
+                                "value": "id"
+                            },
+                            {
+                                "label": "url",
+                                "value": "url"
+                            },
+                            {
+                                "label": "username",
+                                "value": "username"
+                            },
+                            {
+                                "label": "email",
+                                "value": "email"
+                            },
+                            {
+                                "label": "phone",
+                                "value": "phone"
+                            },
+                            {
+                                "label": "description",
+                                "value": "description"
+                            },
+                            {
+                                "label": "tag",
+                                "value": "tag"
+                            }
+                        ],
+                        "filter": {
+                            "title": "查询条件",
+                            "columnCount": 3,
+                            "mode": "horizontal",
+                            "body": [
+                                {
+                                    "type": "input-text",
+                                    "label": "id",
+                                    "name": "id",
+                                    "id": "u:b2c8128afc25",
+                                    "clearable": true
+                                },
+                                {
+                                    "type": "input-text",
+                                    "label": "url",
+                                    "name": "url",
+                                    "id": "u:10c3bf61c5a4",
+                                    "clearable": true
+                                },
+                                {
+                                    "type": "input-text",
+                                    "label": "username",
+                                    "name": "username",
+                                    "id": "u:c23f1bcf5dd4",
+                                    "clearable": true
+                                },
+                                {
+                                    "type": "input-text",
+                                    "label": "email",
+                                    "name": "email",
+                                    "id": "u:014bfcd3718e",
+                                    "clearable": true
+                                },
+                                {
+                                    "type": "input-text",
+                                    "label": "phone",
+                                    "name": "phone",
+                                    "id": "u:d6d22c531168",
+                                    "clearable": true
+                                },
+                                {
+                                    "type": "input-text",
+                                    "label": "description",
+                                    "name": "description",
+                                    "id": "u:05e1b7fc86fe",
+                                    "clearable": true
+                                },
+                                {
+                                    "type": "input-text",
+                                    "label": "tag",
+                                    "name": "tag",
+                                    "id": "u:6016a684eff8",
+                                    "clearable": true
+                                }
+                            ],
+                            "id": "u:bff0ef6ab924",
+                            "actions": [
+                                {
+                                    "type": "submit",
+                                    "label": "搜索",
+                                    "primary": true,
+                                    "id": "u:c7fb93750647"
+                                }
+                            ]
+                        },
+                        "perPageAvailable": [
+                            10,
+                            15
+                        ],
+                        "messages": {
+                        },
+                        "columns": [
+                            {
+                                "label": "id",
+                                "type": "text",
+                                "name": "id",
+                                "id": "u:90d059972424"
+                            },
+                            {
+                                "label": "url",
+                                "type": "text",
+                                "name": "url",
+                                "id": "u:12b8899a384b"
+                            },
+                            {
+                                "label": "username",
+                                "type": "text",
+                                "name": "username",
+                                "id": "u:30150073c0ae"
+                            },
+                            {
+                                "label": "email",
+                                "type": "text",
+                                "name": "email",
+                                "id": "u:16eafcb0d496"
+                            },
+                            {
+                                "label": "phone",
+                                "type": "text",
+                                "name": "phone",
+                                "id": "u:1169747ff307"
+                            },
+                            {
+                                "label": "description",
+                                "type": "text",
+                                "name": "description",
+                                "id": "u:5b21bd6e5213"
+                            },
+                            {
+                                "label": "tag",
+                                "type": "text",
+                                "name": "tag",
+                                "id": "u:4a6feda5f7b8"
+                            },
+                            {
+                                "type": "operation",
+                                "label": "操作",
+                                "buttons": [
+                                    {
+                                        "type": "button",
+                                        "label": "查看/编辑详情",
+                                        "onEvent": {
+                                            "click": {
+                                                "actions": [
+                                                    {
+                                                        "ignoreError": false,
+                                                        "actionType": "dialog",
+                                                        "dialog": {
+                                                            "type": "dialog",
+                                                            "title": "查看/编辑详情",
+                                                            "body": [
+                                                                {
+                                                                    "id": "u:b64e126c309b",
+                                                                    "type": "form",
+                                                                    "title": "请输入RSA密钥对",
+                                                                    "mode": "horizontal",
+                                                                    "dsType": "api",
+                                                                    "feat": "Insert",
+                                                                    "body": [
+                                                                        {
+                                                                            "name": "id",
+                                                                            "label": "id:",
+                                                                            "type": "input-number",
+                                                                            "id": "u:de79da55c16b",
+                                                                            "keyboard": true,
+                                                                            "step": 1,
+                                                                            "disabled": true
+                                                                        },
+                                                                        {
+                                                                            "name": "rsaPublicKey",
+                                                                            "label": "rsaPublicKey:",
+                                                                            "type": "textarea",
+                                                                            "id": "u:f2ac69d02261",
+                                                                            "minRows": 3,
+                                                                            "maxRows": 20,
+                                                                            "required": true
+                                                                        },
+                                                                        {
+                                                                            "name": "rsaPrivateKey",
+                                                                            "label": "rsaPrivateKey:",
+                                                                            "type": "textarea",
+                                                                            "id": "u:bd22d49e669e",
+                                                                            "minRows": 3,
+                                                                            "maxRows": 20,
+                                                                            "required": true
+                                                                        },
+                                                                        {
+                                                                            "type": "button",
+                                                                            "label": "查询",
+                                                                            "onEvent": {
+                                                                                "click": {
+                                                                                    "actions": [
+                                                                                        {
+                                                                                            "componentId": "u:b64e126c309b",
+                                                                                            "ignoreError": false,
+                                                                                            "actionType": "submit",
+                                                                                            "outputVar": "submitResult"
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            },
+                                                                            "id": "u:747fbfc68e23",
+                                                                            "level": "primary",
+                                                                            "wrapperCustomStyle": {
+                                                                            },
+                                                                            "icon": "fa fa-stack-overflow"
+                                                                        }
+                                                                    ],
+                                                                    "api": {
+                                                                        "url": "/api/account/getById",
+                                                                        "method": "post",
+                                                                        "headers": {
+                                                                            "token": "${ls:token}"
+                                                                        },
+                                                                        "requestAdaptor": "",
+                                                                        "adaptor": "",
+                                                                        "messages": {
+                                                                        },
+                                                                        "dataType": "json"
+                                                                    },
+                                                                    "actions": [
+                                                                        {
+                                                                            "type": "button",
+                                                                            "label": "提交",
+                                                                            "onEvent": {
+                                                                                "click": {
+                                                                                    "actions": [
+                                                                                        {
+                                                                                            "actionType": "submit",
+                                                                                            "componentId": "u:f14d680af543"
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            },
+                                                                            "level": "primary",
+                                                                            "id": "u:94ee257696c8"
+                                                                        }
+                                                                    ],
+                                                                    "resetAfterSubmit": false,
+                                                                    "reload": "u:036fbecc00d4?id=${id}&url=${url}&username=${username}&email=${email}&phone=${phone}&password=${password}&secPasswd=${secPasswd}&recoverCode=${recoverCode}&description=${description}&tag=${tag}&createTime=${createTime}&updateTime=${updateTime}&rsaPublicKey=${rsaPublicKey}&rsaPrivateKey=${rsaPrivateKey}"
+                                                                },
+                                                                {
+                                                                    "id": "u:036fbecc00d4",
+                                                                    "type": "form",
+                                                                    "title": "表单",
+                                                                    "mode": "horizontal",
+                                                                    "dsType": "api",
+                                                                    "feat": "Edit",
+                                                                    "body": [
+                                                                        {
+                                                                            "name": "id",
+                                                                            "label": "id",
+                                                                            "type": "input-number",
+                                                                            "id": "u:3567220d7d18",
+                                                                            "keyboard": true,
+                                                                            "step": 1,
+                                                                            "disabled": true
+                                                                        },
+                                                                        {
+                                                                            "name": "url",
+                                                                            "label": "url",
+                                                                            "type": "input-text",
+                                                                            "id": "u:20469f2642e6",
+                                                                            "required": true,
+                                                                            "validations": {
+                                                                                "maxLength": 200
+                                                                            },
+                                                                            "clearable": true,
+                                                                            "showCounter": false
+                                                                        },
+                                                                        {
+                                                                            "name": "username",
+                                                                            "label": "username",
+                                                                            "type": "input-text",
+                                                                            "id": "u:878aba2c5458",
+                                                                            "required": true,
+                                                                            "validations": {
+                                                                                "maxLength": 20
+                                                                            },
+                                                                            "clearable": true,
+                                                                            "showCounter": true
+                                                                        },
+                                                                        {
+                                                                            "name": "email",
+                                                                            "label": "email",
+                                                                            "type": "input-text",
+                                                                            "id": "u:06d8b91b391b",
+                                                                            "validations": {
+                                                                                "maxLength": 40,
+                                                                                "isEmail": true
+                                                                            },
+                                                                            "showCounter": true,
+                                                                            "clearable": true
+                                                                        },
+                                                                        {
+                                                                            "name": "phone",
+                                                                            "label": "phone",
+                                                                            "type": "input-text",
+                                                                            "id": "u:aa2560bf8f89",
+                                                                            "validations": {
+                                                                                "maxLength": 20
+                                                                            },
+                                                                            "showCounter": false,
+                                                                            "clearable": true
+                                                                        },
+                                                                        {
+                                                                            "name": "password",
+                                                                            "label": "password",
+                                                                            "type": "input-text",
+                                                                            "id": "u:86766df5004a",
+                                                                            "required": true,
+                                                                            "showCounter": true,
+                                                                            "clearable": true
+                                                                        },
+                                                                        {
+                                                                            "name": "secPasswd",
+                                                                            "label": "secPasswd",
+                                                                            "type": "input-text",
+                                                                            "id": "u:7562dace09b5",
+                                                                            "clearable": true
+                                                                        },
+                                                                        {
+                                                                            "name": "recoverCode",
+                                                                            "label": "recoverCode",
+                                                                            "type": "input-text",
+                                                                            "id": "u:0cdf53368079",
+                                                                            "clearable": true
+                                                                        },
+                                                                        {
+                                                                            "name": "description",
+                                                                            "label": "description",
+                                                                            "type": "input-text",
+                                                                            "id": "u:3a1129354d3d",
+                                                                            "required": true,
+                                                                            "validations": {
+                                                                                "maxLength": 100
+                                                                            },
+                                                                            "clearable": false,
+                                                                            "showCounter": true
+                                                                        },
+                                                                        {
+                                                                            "name": "tag",
+                                                                            "label": "tag",
+                                                                            "type": "input-text",
+                                                                            "id": "u:073cf81a08e2",
+                                                                            "required": true,
+                                                                            "validations": {
+                                                                                "maxLength": 200
+                                                                            },
+                                                                            "showCounter": true
+                                                                        },
+                                                                        {
+                                                                            "name": "createTime",
+                                                                            "label": "createTime",
+                                                                            "type": "select",
+                                                                            "id": "u:1c19f2863bf9",
+                                                                            "multiple": false,
+                                                                            "disabled": true
+                                                                        },
+                                                                        {
+                                                                            "name": "updateTime",
+                                                                            "label": "updateTime",
+                                                                            "type": "select",
+                                                                            "id": "u:5c1b3984ebfd",
+                                                                            "multiple": false,
+                                                                            "disabled": true
+                                                                        }
+                                                                    ],
+                                                                    "api": {
+                                                                        "url": "/api/account",
+                                                                        "method": "put",
+                                                                        "requestAdaptor": "",
+                                                                        "headers": {
+                                                                            "token": "${ls:token}"
+                                                                        },
+                                                                        "adaptor": "",
+                                                                        "messages": {
+                                                                            "success": "修改成功！若数据未更新，请手动刷新页面！"
+                                                                        },
+                                                                        "dataType": "json",
+                                                                        "data": {
+                                                                            "rsaPublicKey": "${rsaPublicKey}",
+                                                                            "rsaPrivateKey": "${rsaPrivateKey}",
+                                                                            "id": "${id}",
+                                                                            "url": "${url}",
+                                                                            "username": "${username}",
+                                                                            "email": "${email}",
+                                                                            "phone": "${phone}",
+                                                                            "password": "${password}",
+                                                                            "secPasswd": "${secPasswd}",
+                                                                            "recoverCode": "${recoverCode}",
+                                                                            "description": "${description}",
+                                                                            "tag": "${tag}"
+                                                                        }
+                                                                    },
+                                                                    "actions": [
+                                                                        {
+                                                                            "type": "button",
+                                                                            "label": "提交",
+                                                                            "onEvent": {
+                                                                                "click": {
+                                                                                    "actions": [
+                                                                                        {
+                                                                                            "actionType": "submit",
+                                                                                            "componentId": "u:6abb6335f585"
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            },
+                                                                            "level": "primary",
+                                                                            "id": "u:5e04e087bb98"
+                                                                        }
+                                                                    ],
+                                                                    "resetAfterSubmit": true
+                                                                }
+                                                            ],
+                                                            "showCloseButton": true,
+                                                            "showErrorMsg": true,
+                                                            "showLoading": true,
+                                                            "className": "app-popover",
+                                                            "actions": [
+                                                                {
+                                                                    "type": "button",
+                                                                    "actionType": "cancel",
+                                                                    "label": "取消",
+                                                                    "id": "u:4b19d3b5ef29"
+                                                                },
+                                                                {
+                                                                    "type": "button",
+                                                                    "actionType": "confirm",
+                                                                    "label": "提交修改",
+                                                                    "primary": true,
+                                                                    "id": "u:ac70d25456e6",
+                                                                    "onEvent": {
+                                                                        "click": {
+                                                                            "weight": 0,
+                                                                            "actions": [
+                                                                                {
+                                                                                    "componentId": "u:b1306d47fe98",
+                                                                                    "ignoreError": false,
+                                                                                    "actionType": "reload"
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "id": "u:06f5c55728fa",
+                                                            "closeOnOutside": false,
+                                                            "closeOnEsc": false,
+                                                            "withDefaultData": false,
+                                                            "dataMapSwitch": false
+                                                        }
+                                                    }
+                                                ],
+                                                "debounce": {
+                                                    "wait": 100
+                                                }
+                                            }
+                                        },
+                                        "id": "u:e0c001001a96",
+                                        "disabled": false,
+                                        "level": "primary"
+                                    }
+                                ],
+                                "id": "u:7ffbf7a8dc7e"
+                            }
+                        ],
+                        "footerToolbar": [
+                            {
+                                "type": "statistics",
+                                "id": "u:f26ff305993f"
+                            },
+                            {
+                                "type": "pagination",
+                                "id": "u:bb480907ef15"
+                            },
+                            {
+                                "type": "switch-per-page",
+                                "tpl": "内容",
+                                "wrapperComponent": "",
+                                "id": "u:61bc58bcbbdc"
+                            }
+                        ],
+                        "headerToolbar": [
+                            {
+                                "label": "新增",
+                                "type": "button",
+                                "actionType": "dialog",
+                                "level": "primary",
+                                "dialog": {
+                                    "title": "新增",
+                                    "body": [
+                                        {
+                                            "type": "form",
+                                            "api": {
+                                                "url": "/api/account",
+                                                "method": "post",
+                                                "headers": {
+                                                    "token": "${ls:token}"
+                                                },
+                                                "messages": {
+                                                    "success": "新增成功！若数据未更新，请手动刷新页面！"
+                                                }
+                                            },
+                                            "body": [
+                                                {
+                                                    "type": "input-text",
+                                                    "name": "url",
+                                                    "label": "url",
+                                                    "id": "u:64260c05fba3",
+                                                    "required": true,
+                                                    "validations": {
+                                                        "maxLength": 200
+                                                    },
+                                                    "clearable": true
+                                                },
+                                                {
+                                                    "type": "input-text",
+                                                    "name": "username",
+                                                    "label": "username",
+                                                    "id": "u:5d4d2a366286",
+                                                    "required": true,
+                                                    "validations": {
+                                                        "maxLength": 20
+                                                    },
+                                                    "clearable": true,
+                                                    "showCounter": true
+                                                },
+                                                {
+                                                    "type": "input-text",
+                                                    "name": "email",
+                                                    "label": "email",
+                                                    "id": "u:ff151ad6cbf3",
+                                                    "validations": {
+                                                        "isEmail": true,
+                                                        "maxLength": 40
+                                                    },
+                                                    "clearable": true
+                                                },
+                                                {
+                                                    "type": "input-text",
+                                                    "name": "phone",
+                                                    "label": "phone",
+                                                    "id": "u:5ddce706ad6f",
+                                                    "validations": {
+                                                        "maxLength": 20
+                                                    },
+                                                    "clearable": true
+                                                },
+                                                {
+                                                    "type": "input-text",
+                                                    "label": "password",
+                                                    "name": "password",
+                                                    "id": "u:dfa5ac7e8191",
+                                                    "required": true,
+                                                    "validations": {
+                                                        "maxLength": 32
+                                                    },
+                                                    "showCounter": true
+                                                },
+                                                {
+                                                    "type": "input-text",
+                                                    "label": "secPasswd",
+                                                    "name": "secPasswd",
+                                                    "id": "u:ce1897e6824f",
+                                                    "showCounter": false,
+                                                    "clearable": true
+                                                },
+                                                {
+                                                    "type": "input-text",
+                                                    "label": "recoverCode",
+                                                    "name": "recoverCode",
+                                                    "id": "u:523a020f0bbe",
+                                                    "clearable": true
+                                                },
+                                                {
+                                                    "type": "textarea",
+                                                    "label": "description",
+                                                    "name": "description",
+                                                    "id": "u:d3ee4af53e4d",
+                                                    "minRows": 3,
+                                                    "maxRows": 20,
+                                                    "required": true,
+                                                    "showCounter": true
+                                                },
+                                                {
+                                                    "type": "textarea",
+                                                    "label": "tag",
+                                                    "name": "tag",
+                                                    "id": "u:377e8767c4af",
+                                                    "minRows": 3,
+                                                    "maxRows": 20,
+                                                    "required": true,
+                                                    "showCounter": true
+                                                },
+                                                {
+                                                    "type": "textarea",
+                                                    "label": "rsaPublicKey",
+                                                    "name": "rsaPublicKey",
+                                                    "id": "u:b077ea37bf0f",
+                                                    "minRows": 3,
+                                                    "maxRows": 20,
+                                                    "required": true
+                                                }
+                                            ],
+                                            "id": "u:2a9df3a63540",
+                                            "actions": [
+                                                {
+                                                    "type": "submit",
+                                                    "label": "提交",
+                                                    "primary": true
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "id": "u:ee24c6b461df",
+                                    "actions": [
+                                        {
+                                            "type": "button",
+                                            "actionType": "cancel",
+                                            "label": "取消",
+                                            "id": "u:89375916a642"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "actionType": "confirm",
+                                            "label": "确定",
+                                            "primary": true,
+                                            "id": "u:2d2246e14ad5"
+                                        }
+                                    ]
+                                },
+                                "id": "u:c248476412dd"
+                            },
+                            "bulkActions"
+                        ]
+                    }
+                ],
+                "id": "u:7afdd8b6f99b",
+                "title": "Simple Form Page",
+                "regions": [
+                    "body"
+                ]
+            };
+            let amisScoped = amis.embed(
+                '#root',
+                amisJSON,
+                {},
+                {
+                    fetcher: (url, method, data, config) => {
+                        const token = localStorage.getItem("token");
+                        // 如果token不存在，跳转index.html
+                        if (!token) {
+                            window.location.href = '/login.html';
+                        }
+
+                        return axios(url, method, data, config)
+                            .catch(error => {
+                                if (error.response && error.response.status === 401)
+                                    window.location.href = '/login.html';
+                            });
+                    },
+                }
+            );
+        })();
+    </script>
+</body>
+
+</html>
